@@ -1,6 +1,6 @@
-from src.connection import AzureBlobConnection,AzureTableConnection
-from src.report import ReportRetreival
-from src.image import ImageRetreival
+from connection import AzureBlobConnection,AzureTableConnection
+from report import ReportRetreival
+from image import ImageRetreival
 from dataclasses import dataclass
 from PIL import Image
 import pickle
