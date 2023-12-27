@@ -20,6 +20,9 @@ class ImageRetreival:
     
     def get_image_png(self, id, year, proyection) -> Image:
         dcm = self.get_image_dcm(id, year, proyection)
+        if dcm == None:
+            raise FileExistsError('Image not found')
+            
         dcm.NumberOfFrames = int(dcm.NumberOfFrames)
         if dcm.file_meta.TransferSyntaxUID.is_compressed:
             dcm.decompress('pylibjpeg')
@@ -82,7 +85,8 @@ class ImageRetreival:
             requested_blob:str=None
             for blob in blobs:
     
-                if id in blob.name and year in blob.name and proyection in blob.name:
+                if str(id) in blob.name and str(year) in blob.name and proyection in blob.name:
+
                     requested_blob = blob.name
                     break
         

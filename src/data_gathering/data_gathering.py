@@ -41,15 +41,21 @@ class DataGathering:
         filename = f"{case.id}_{case.year}.pkl"
 
         # Save the object using pickle
-        with open(os.path.join(self.path, filename), 'wb') as f:
+        with open(filename, 'wb') as f:
             pickle.dump(case, f)
 
     
     def get_case(self,id,year,save_case=False):
 
         req_case = ClinicalCase(id=id,year=year,l_cc=None,l_mlo=None,r_cc=None,r_mlo=None,report=None)
+        valid = True
         for proyection in self.proyections:
-            image = self.image_retreival.get_image_png(id,year,proyection)
+            try:
+                image = self.image_retreival.get_image_png(id,year,proyection)
+            except FileNotFoundError:
+                print(f'Image {id} {year} {proyection} not found')
+                image = None
+                valid = False
             if proyection == 'L__CC':
                 req_case.l_cc = image
             elif proyection == 'L__MLO':
@@ -60,6 +66,14 @@ class DataGathering:
                 req_case.r_mlo = image
 
         req_case.report = self.report_retreival.get_report(id,year)
+        if req_case.report is None:
+            print(f'Report {id} {year} not found')
+            valid = False
+
+        if not valid:
+            return None
+        
+        
         if save_case:
             self.save_case(req_case)
 
