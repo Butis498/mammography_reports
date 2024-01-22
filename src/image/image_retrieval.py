@@ -85,8 +85,7 @@ class ImageRetreival:
             requested_blob:str=None
             for blob in blobs:
     
-                if str(id) in blob.name and str(year) in blob.name and proyection in blob.name:
-
+                if str(id) in blob.name and str(year) in blob.name and str(proyection) in blob.name:
                     requested_blob = blob.name
                     break
         
